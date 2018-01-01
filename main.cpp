@@ -30,8 +30,8 @@ void typeInt(int i);
 void typeFloat(float myFloat);
 void lcdLoc(int line); //move cursor
 void ClrLcd(void); // clr LCD return home
-void typeln(string &name);
-void typeln(const char *s);
+void typeln(const char &alignment, const string &message);
+void typeln(const char &alignment, const char *s);
 void typeChar(char val);
 int fd;  // seen by all subroutines
 
@@ -41,7 +41,9 @@ int main()   {
 
     fd = wiringPiI2CSetup(I2C_ADDR);
 
-    string myname = "Patrick";
+    const char r = "r";
+    const char l = "l";
+    const char m = "m";
 
     lcd_init(); // setup LCD
 
@@ -50,15 +52,15 @@ int main()   {
         ClrLcd();
 
 
-
+        string myname = "Patrick";
         lcdLoc(LINE1);
-        typeln(myname);
+        typeln(m, myname);
 
 
         delay(3000);
         ClrLcd();
         string what = "Test";
-        typeln("What");
+        typeln(l, "What");
         delay(3000);
     }
 
@@ -100,16 +102,37 @@ void typeChar(char val)   {
 
 
 
-void typeln(const char *s){
+void typeln(const char &alignment, const char *s){
 
     while ( *s ) lcd_byte(*(s++), LCD_CHR);
 
 }
 
-void typeln(string &name){
-    for(int i{0}; i < name.length(); ++i){
-        lcd_byte(name.at(i), LCD_CHR);
+void typeln(const char &alignment, const string &message){
+    if(alignment == "l"){
+        for(int i{0}; i < message.length(); ++i){
+            lcd_byte(name.at(i), LCD_CHR);
+        }
     }
+
+    if(alignment == "m"){
+        string temp;
+        int getspaces{0};
+        
+        getspaces = (16 - message.length()) / 2;
+
+        for(int i{0}; i <= getspaces; ++i){
+            temp += " ";
+        } 
+
+        temp += message;
+        for(int i{0}; i < temp.length(); ++i){
+            lcd_byte(name.at(i), LCD_CHR);
+        }
+    }
+
+    if(alignment = "r")
+
 }
 
 void lcd_byte(int bits, int mode)   {
