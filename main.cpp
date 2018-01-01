@@ -131,7 +131,7 @@ void typeln(const char &alignment, const string &message){
         }
     }
 
-    if(alignment == 'r')
+    
 
 }
 
