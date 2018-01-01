@@ -41,9 +41,9 @@ int main()   {
 
     fd = wiringPiI2CSetup(I2C_ADDR);
 
-    char r = "r";
-    char l = "l";
-    char m = "m";
+    char r = 'r';
+    char l = 'l';
+    char m = 'm';
 
     lcd_init(); // setup LCD
 
@@ -109,13 +109,13 @@ void typeln(const char &alignment, const char *s){
 }
 
 void typeln(const char &alignment, const string &message){
-    if(alignment == "l"){
+    if(alignment == 'l'){
         for(int i{0}; i < message.length(); ++i){
             lcd_byte(message.at(i), LCD_CHR);
         }
     }
 
-    if(alignment == "m"){
+    if(alignment == 'm'){
         string temp;
         int getspaces{0};
         
@@ -131,7 +131,7 @@ void typeln(const char &alignment, const string &message){
         }
     }
 
-    if(alignment = "r")
+    if(alignment = 'r')
 
 }
 
