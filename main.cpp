@@ -57,7 +57,7 @@ int main()   {
 
         delay(3000);
         ClrLcd();
-        string what = "What";
+        string what = "Test";
         typeln("What");
         delay(3000);
     }
