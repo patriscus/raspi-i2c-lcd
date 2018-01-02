@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <iostream>
 #include <string>
+#include <stdexcept>
 
 using namespace std;
 
@@ -30,10 +31,15 @@ void typeInt(int i);
 void typeFloat(float myFloat);
 void lcdLoc(int line); //move cursor
 void ClrLcd(void); // clr LCD return home
-void typeln(const char &alignment, const string &message);
-void typeln(const char &alignment, const char *s);
+void typeln(char &alignment, int pause, string message);
+void typeln(char &alignment, const char *s);
 void typeChar(char val);
 int fd;  // seen by all subroutines
+
+int currentln{0};
+char r = 'r';
+char l = 'l';
+char m = 'm';
 
 int main()   {
 
@@ -44,6 +50,7 @@ int main()   {
     char r = 'r';
     char l = 'l';
     char m = 'm';
+    
 
     lcd_init(); // setup LCD
 
@@ -51,17 +58,17 @@ int main()   {
 
         ClrLcd();
 
-
-        string myname = "Patrick";
+        string small = "small";
+        string myname = "Ein Test, was passiert wenn es sogar mehr als 32 Zeichen hat";
         lcdLoc(LINE1);
-        typeln(m, myname);
+        typeln(m, 100, myname);
 
 
-        delay(3000);
+        delay(1000);
         ClrLcd();
         string what = "Test";
-        typeln(l, "What");
-        delay(3000);
+        typeln(r, 200, what);
+        delay(1000);
     }
 
     return 0;
@@ -92,6 +99,7 @@ void ClrLcd(void)   {
 // go to location on LCD
 void lcdLoc(int line)   {
     lcd_byte(line, LCD_CMD);
+    (line == 0x80) ? currentln = 1 : currentln = 2;
 }
 
 
@@ -108,31 +116,87 @@ void typeln(const char &alignment, const char *s){
 
 }
 
-void typeln(const char &alignment, const string &message){
-    if(alignment == 'l'){
-        for(int i{0}; i < message.length(); ++i){
-            lcd_byte(message.at(i), LCD_CHR);
+void typeln(char &alignment, int pause, string message){
+    string m = message;
+
+    if(message.length() > 15){
+        alignment = 'l';
+        for(int i{0}; i < 16; ++i){
+                lcd_byte(m.at(i), LCD_CHR);
+                delay(pause);
         }
-    }
 
-    if(alignment == 'm'){
-        string temp;
-        int getspaces{0};
+        m = "";
+        for(int i{16}; i < message.length(); ++i){
+            m += message.at(i);
+        }        
+
         
-        getspaces = (16 - message.length()) / 2;
 
-        for(int i{0}; i <= getspaces; ++i){
-            temp += " ";
+        if(currentln == 1){
+            lcdLoc(LINE2);
         } 
 
-        temp += message;
-        for(int i{0}; i < temp.length(); ++i){
-            lcd_byte(message.at(i), LCD_CHR);
+        else{
+            lcdLoc(LINE1);
+            ClrLcd();
+           
         }
+        typeln(l, pause, m);
+            
+    }       
+
+    else{
+        if(alignment == 'l'){ 
+            for(int i{0}; i < message.length(); ++i){
+                lcd_byte(message.at(i), LCD_CHR);
+                delay(pause);
+            }
+        
+        }
+            
+        if(alignment == 'm'){
+
+            string temp;
+            int getspaces{0};
+        
+            getspaces = (16 - message.length()) / 2;
+
+            for(int i{0}; i <= getspaces; ++i){
+                temp += " ";
+            } 
+
+            temp += message;
+            for(int i{0}; i < temp.length(); ++i){
+                lcd_byte(temp.at(i), LCD_CHR);
+                delay(pause);
+            }
+
+                
+        }
+
+        if(alignment == 'r'){
+
+            string temp;
+            int getspaces{0};
+
+            getspaces = (16 - message.length());
+
+            for(int i{0}; i < getspaces; ++i){
+                temp += " "; 
+            }
+
+            temp += message;
+            for(int i{0}; i < temp.length(); ++i){
+                lcd_byte(temp.at(i), LCD_CHR);
+                delay(pause);
+            }   
+            
+
+        }
+
     }
-
     
-
 }
 
 void lcd_byte(int bits, int mode)   {
