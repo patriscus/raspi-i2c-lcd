@@ -59,7 +59,7 @@ int main()   {
         ClrLcd();
 
         string small = "small";
-        string myname = "Ein Test, was passiert wenn es sogar mehr als 32 Zeichen hat";
+        string myname = "insert random quote here";
         lcdLoc(LINE1);
         typeln(m, 100, myname);
 
@@ -169,7 +169,7 @@ void typeln(char &alignment, int pause, string message){
             temp += message;
             for(int i{0}; i < temp.length(); ++i){
                 lcd_byte(temp.at(i), LCD_CHR);
-                delay(pause);
+               if( i > getspaces ) delay(pause);
             }
 
                 
@@ -189,7 +189,7 @@ void typeln(char &alignment, int pause, string message){
             temp += message;
             for(int i{0}; i < temp.length(); ++i){
                 lcd_byte(temp.at(i), LCD_CHR);
-                delay(pause);
+                if( i > getspaces )delay(pause);
             }   
             
 
