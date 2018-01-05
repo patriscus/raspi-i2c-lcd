@@ -65,8 +65,6 @@ void LCD::lcd_toggle_enable(int bits)   {
 }
 
 void LCD::lcdLoc(int line){
-    (line == 1) ? lcd_byte(this->Line1, LCD_CMD) : lcd_byte(this->Line2, LCD_CMD);
-
     if(line == 1){
         lcd_byte(Line1, LCD_CMD);
         currentln = 1;
