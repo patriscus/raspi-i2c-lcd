@@ -12,14 +12,9 @@ You only need to download the files and include the LCD.h file into your main cp
 You need a library called [WiringPi](http://wiringpi.com/) in order to use the code. For the installation process please refer to [this](http://wiringpi.com/download-and-install/) page.
 
 
-## Contributing
-
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
-
-
 ## Authors
 
-* **Patrick Ahmetovic**
+* **Patrick Ahmetovic** - *rewriting the code*
 
 See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
 
@@ -29,5 +24,5 @@ See also the list of [contributors](https://github.com/your/project/contributors
 I would like to thank these people for sharing their code.
 
 * Gordon Henderson - [WiringPi](http://wiringpi.com/)
-* Lewis Lofin - [written in C](http://www.bristolwatch.com/rpi/i2clcd.htm)
+* Lewis Lofin - [link](http://www.bristolwatch.com/rpi/i2clcd.htm)
 
