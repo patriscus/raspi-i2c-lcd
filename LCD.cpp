@@ -185,7 +185,7 @@ void LCD::print(char alignment, const char *s){
     string message;
 
     while ( *s ) message += *(s++);
-    print(alignment, message;)
+    print(alignment, message);
 }
 
 void LCD::printChar(char c){
