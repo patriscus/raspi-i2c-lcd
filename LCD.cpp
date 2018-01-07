@@ -182,7 +182,10 @@ void LCD::print(char alignment, int pause, string message){
 }
 
 void LCD::print(char alignment, const char *s){
-    while ( *s ) lcd_byte(*(s++), LCD_CHR);
+    string message;
+
+    while ( *s ) message += *(s++);
+    print(alignment, message;)
 }
 
 void LCD::printChar(char c){
