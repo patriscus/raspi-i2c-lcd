@@ -44,7 +44,7 @@ lcd.print(alignment, pause, "Hello World");
 
 ## Social
 
-You can find me at [Twitter](http://www.bristolwatch.com/rpi/i2clcd.htm).
+You can find me at [Twitter](https://twitter.com/patrickdotzip).
 
 
 ## Acknowledgments
