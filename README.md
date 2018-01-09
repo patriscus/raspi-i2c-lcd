@@ -21,32 +21,30 @@ LCD lcd;
 
 To clear the display:
 
-```c++
+```cpp
 // This method takes in the amount of milliseconds to pause before clearing
 lcd.clear(pause);
 ```
 
 To write on Line 1:
 
-```c++
+```cpp
 lcd.lcdLoc(1);  //1 for Line 1, 2 for Line 2
 ```
 
 To show a message on the Display:
 
-```c++
+```cpp
 // You can pass a string or write directly
 // l = left, m = middle, r = right alignment
-// Pause defines the time befor next character is being displayed
+// Pause defines the time before next character is being displayed
 lcd.print(alignment, pause, message);
 lcd.print(alignment, pause, "Hello World");
 ```
 
-## Authors
+##### Social
 
-**Patrick A.** - *rewriting the code*
-
-* [Twitter](http://www.bristolwatch.com/rpi/i2clcd.htm)
+You can find me at [Twitter](http://www.bristolwatch.com/rpi/i2clcd.htm).
 
 
 ## Acknowledgments
