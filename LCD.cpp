@@ -1,11 +1,21 @@
 #include "LCD.h"
+#include <wiringPiI2C.h>
+#include <wiringPi.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <iostream>
+#include <string>
+#include <stdexcept>
 
 using namespace std;
 
-LCD::LCD() {
+LCD::LCD(const char& alignment, int pause): alignment{alignment}, pause{pause} {
 
     if (wiringPiSetup () == -1) 
         throw runtime_error("WiringPiSetup failed.");
+
+    if(alignment != 'l' && alignment != 'm' && alignment != 'r')
+        throw runtime_error("LCD::LCD: alignment has no valid value. (l, m, r).");
 
     this->set_variables();
 
@@ -64,7 +74,7 @@ void LCD::lcd_toggle_enable(int bits)   {
     delayMicroseconds(500);
 }
 
-void LCD::lcdLoc(int line){
+void LCD::set_location(int line){
     if(line == 1){
         lcd_byte(Line1, LCD_CMD);
         currentln = 1;
@@ -75,7 +85,6 @@ void LCD::lcdLoc(int line){
 }
 
 void LCD::clear(int pause){
-
     if(pause > 0)
         delay(pause);
 
@@ -83,35 +92,36 @@ void LCD::clear(int pause){
     lcd_byte(0x02, LCD_CMD);
 }
 
-void LCD::printNum(int pause, int number){
+void LCD::printNum(int number){
     string temp = to_string(number);
 
     for(char c: temp){
         lcd_byte(c, LCD_CHR);
-        if(pause > 0)
+        if(pause > 0 && c != ' ');
             delay(pause);
     }
 }
 
-void LCD::printNum(int pause, float number){
+void LCD::printNum(float number){
     string temp = to_string(number);
 
     for(char c: temp){
         lcd_byte(c, LCD_CHR);
-        if(pause > 0)
+        if(pause > 0 && c != ' ')
             delay(pause);
     }
 }
 
-void LCD::print(char alignment, int pause, string message){
+void LCD::print(const string& message){
     
     //Word-wrap
     if(message.length() > 15){
-        string temp_m = message;
+        string temp_m {message};
 
         for(int i{0}; i < 16; ++i){
                 lcd_byte(temp_m.at(i), LCD_CHR);
-                delay(pause);
+                if(pause > 0 && temp_m.at(i) != ' ')
+                    delay(pause);
         }
 
         temp_m = "";
@@ -121,21 +131,22 @@ void LCD::print(char alignment, int pause, string message){
           
 
         if(currentln == 1)
-            lcdLoc(2);
+            set_location(2);
 
         else {
-            lcdLoc(1);
+            set_location(1);
             clear(0);
         }               
 
-        print(alignment, pause, temp_m);
+        print(temp_m);
     }
 
     else{
         if(alignment == 'l'){ 
             for(int i{0}; i < message.length(); ++i){
                 lcd_byte(message.at(i), LCD_CHR);
-                delay(pause);
+                if(pause > 0 && message.at(i) != ' ')
+                    delay(pause);
             }
         }
 
@@ -153,7 +164,7 @@ void LCD::print(char alignment, int pause, string message){
             temp += message;
             for(int i{0}; i < temp.length(); ++i){
                 lcd_byte(temp.at(i), LCD_CHR);
-                if(i > getspaces)
+                if(i > getspaces  && temp.at(i) != ' ')
                     delay(pause);
             }    
         }
@@ -172,19 +183,32 @@ void LCD::print(char alignment, int pause, string message){
             temp += message;
             for(int i{0}; i < temp.length(); ++i){
                 lcd_byte(temp.at(i), LCD_CHR);
-                if(i > getspaces)
+                if(i > getspaces && temp.at(i) != ' ')
                     delay(pause);
             }   
         }
-
     }
-
 }
-
+/*
 void LCD::print(char alignment, const char *s){
     while ( *s ) lcd_byte(*(s++), LCD_CHR);
+}*/
+
+ void LCD::set_delay(int pause){
+     this->pause = pause;
+ }
+
+void LCD::set_alignment(const char& c){
+    if(alignment != 'l' && alignment != 'm' && alignment != 'r')
+        throw runtime_error("LCD::set_alignment: No valid value for variable 'alignment' (options are l, m, r).");
+    alignment = c;
 }
 
-void LCD::printChar(char c){
+void LCD::operator<<(const char *s){
+    string message{s};
+    this->print(message);
+}
 
+void LCD::operator<<(const string& s){
+    this->print(s);
 }

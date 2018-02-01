@@ -11,13 +11,11 @@ int main(){
         string hello = "Hello";
 
         lcd.clear(0);
-        lcd.lcdLoc(1);
-        lcd.print(m, 50, hello);
+        lcd.set_location(1);
+        lcd.set_delay(500);
 
-        string test_wrap = "A test, if word wrap works as intended";
-        lcd.clear(1000);
-        lcd.lcdLoc(1);
-        lcd.print(l, 50, test_wrap);
+        lcd << hello;
+        lcd << "This is a test";
 
         delay(1000);
     }
