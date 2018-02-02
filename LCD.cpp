@@ -113,10 +113,8 @@ void LCD::printNum(float number){
 }
 
 void LCD::print(const string& message){
-    
-    //Word-wrap
-    if(message.length() > 15){
-        string temp_m {message};
+    string temp_m {message};
+    while(temp_m.length() > 16){
 
         for(int i{0}; i < 16; ++i){
                 lcd_byte(temp_m.at(i), LCD_CHR);
@@ -125,10 +123,8 @@ void LCD::print(const string& message){
         }
 
         temp_m = "";
-
-        for(int i{16}; i < message.length(); ++i) 
+        for(int i{16}; i < message.length(); ++i)
             temp_m += message.at(i);
-          
 
         if(currentln == 1)
             set_location(2);
@@ -136,22 +132,22 @@ void LCD::print(const string& message){
         else {
             set_location(1);
             clear(0);
-        }               
-
-        print(temp_m);
+        }     
     }
 
-    else{
-        if(alignment == 'l'){ 
+    enum class align{left, middle, right};
+    char alignment[3] {'l', 'm', 'r'};
+
+    switch(align::alignment){
+        case align::left:
             for(int i{0}; i < message.length(); ++i){
                 lcd_byte(message.at(i), LCD_CHR);
                 if(pause > 0 && message.at(i) != ' ')
                     delay(pause);
             }
-        }
+            break;
 
-        else if(alignment == 'm'){
-
+        case align::middle:
             string temp;
             int getspaces{0};
         
@@ -160,17 +156,15 @@ void LCD::print(const string& message){
             for(int i{0}; i <= getspaces; ++i)
                 temp += " ";
             
-
             temp += message;
             for(int i{0}; i < temp.length(); ++i){
                 lcd_byte(temp.at(i), LCD_CHR);
                 if(i > getspaces  && temp.at(i) != ' ')
                     delay(pause);
-            }    
-        }
+            }
+            break;
 
-         if(alignment == 'r'){
-
+        case align::right:
             string temp;
             int getspaces{0};
 
@@ -179,16 +173,19 @@ void LCD::print(const string& message){
             for(int i{0}; i < getspaces; ++i)
                 temp += " "; 
             
-
             temp += message;
             for(int i{0}; i < temp.length(); ++i){
                 lcd_byte(temp.at(i), LCD_CHR);
                 if(i > getspaces && temp.at(i) != ' ')
                     delay(pause);
-            }   
-        }
+            }
+            break;
+        
+        default:
+            throw runtime_error("LCD::print: print() -> switch not working.");
     }
 }
+
 /*
 void LCD::print(char alignment, const char *s){
     while ( *s ) lcd_byte(*(s++), LCD_CHR);
