@@ -11,6 +11,8 @@
 
 using namespace std;
 
+enum class alignment{left, middle, right};
+
 class LCD {
     int I2C_ADDR;
     int LCD_CHR;
@@ -21,9 +23,8 @@ class LCD {
     int Line2;
 
     int currentln;
-    char alignment;
     int pause;
-
+    alignment align;
   
 
     void set_variables();
@@ -34,7 +35,7 @@ class LCD {
     int fd;
 
     public:
-        LCD(const char& alignment = 'l', int pause = 0);
+        LCD(const alignment& align = alignment::left, int pause = 0);
         void clear(int pause);
         //Note: this changes currentln value
         void set_location(int line);
@@ -43,7 +44,7 @@ class LCD {
         void print(const string& message);
 
         void set_delay(int pause);
-        void set_alignment(const char& c);
+        void set_alignment(const alignment& a);
         void operator<<(const char *s);
         void operator<<(const string& s);
 };

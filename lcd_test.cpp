@@ -2,23 +2,12 @@
 using namespace std;
 
 int main(){
-    LCD lcd;
-    char r = 'r';
-    char l = 'l';
-    char m = 'm';
+    LCD lcd {alignment::middle, 50};
 
     while(1){
-        string hello = "Hello";
-
-        lcd.clear(0);
-        lcd.set_location(1);
-        lcd.set_delay(500);
-
-        lcd << hello;
-        lcd << "This is a test";
-
+        lcd << "This is a test, if word wrap works.":
         delay(1000);
     }
-
+    
     return 0;
 }

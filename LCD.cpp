@@ -9,12 +9,12 @@
 
 using namespace std;
 
-LCD::LCD(const char& alignment, int pause): alignment{alignment}, pause{pause} {
+LCD::LCD(const alignment& align, int pause): align{align}, pause{pause} {
 
     if (wiringPiSetup () == -1) 
         throw runtime_error("WiringPiSetup failed.");
 
-    if(alignment != 'l' && alignment != 'm' && alignment != 'r')
+    if(align != alignment::left && align != alignment::middle && align != alignment::right)
         throw runtime_error("LCD::LCD: alignment has no valid value. (l, m, r).");
 
     this->set_variables();
@@ -135,11 +135,8 @@ void LCD::print(const string& message){
         }     
     }
 
-    enum class align{left, middle, right};
-    char alignment[3] {'l', 'm', 'r'};
-
-    switch(align::alignment){
-        case align::left:
+    switch(align){
+        case alignment::left:
             for(int i{0}; i < message.length(); ++i){
                 lcd_byte(message.at(i), LCD_CHR);
                 if(pause > 0 && message.at(i) != ' ')
@@ -147,7 +144,7 @@ void LCD::print(const string& message){
             }
             break;
 
-        case align::middle:
+        case alignment::middle:
             string temp;
             int getspaces{0};
         
@@ -164,7 +161,7 @@ void LCD::print(const string& message){
             }
             break;
 
-        case align::right:
+        case alignment::right:
             string temp;
             int getspaces{0};
 
@@ -195,10 +192,10 @@ void LCD::print(char alignment, const char *s){
      this->pause = pause;
  }
 
-void LCD::set_alignment(const char& c){
-    if(alignment != 'l' && alignment != 'm' && alignment != 'r')
+void LCD::set_alignment(const alignment& a){
+    if(align != alignment::left && align != alignment::middle && align != alignment::right)
         throw runtime_error("LCD::set_alignment: No valid value for variable 'alignment' (options are l, m, r).");
-    alignment = c;
+    align = a;
 }
 
 void LCD::operator<<(const char *s){
